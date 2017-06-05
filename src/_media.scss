@@ -1,0 +1,41 @@
+$query-breakpoints: (
+  xsmall: em-calc(360),
+  small: em-calc(480),
+  smedium: em-calc(640),
+  medium: em-calc(980),
+  large: em-calc(1024),
+  xlarge: em-calc(1200)
+);
+
+@function query-breakpoint-val($breakpoint) {
+  @if not map-has-key($query-breakpoints, $breakpoint) {
+    @return $breakpoint;
+  }
+  @else {
+    @return #{map-get($query-breakpoints, $breakpoint)};
+  }
+}
+
+@mixin media($from, $to:'') {
+  @if $to == '<' {
+    @media screen and (max-width:#{query-breakpoint-val($from) - em-calc(1)}) {
+      @content;
+    }
+  }
+  @else if $to == '' or $to == '>' {
+    @media screen and (min-width:#{query-breakpoint-val($from)}) {
+      @content;
+    }
+  }
+  @else {
+    @media screen and (min-width:#{query-breakpoint-val($from)}) and (max-width:#{query-breakpoint-val($to) - em-calc(1)}) {
+      @content;
+    }
+  }
+}
+
+@mixin media_down($from) {
+  @include media($from, '<') {
+    @content;
+  }
+}

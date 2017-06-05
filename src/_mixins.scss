@@ -1,0 +1,43 @@
+@mixin clearfix {
+  zoom: 1;
+
+  &::before,
+  &::after {
+    content: "";
+    display: block;
+    height: 0;
+    overflow: hidden;
+  }
+
+  &::after {
+    clear: both;
+  }
+}
+
+@mixin font-face($path, $name, $family, $ver) {
+  font-family: '#{$family}';
+  src:  url('#{$path}/#{$name}.eot?v=#{$ver}');
+  src:  url('#{$path}/#{$name}.eot?#iefix&v=#{$ver}') format('embedded-opentype'),
+        url('#{$path}/#{$name}.woff?v=#{$ver}') format('woff'),
+        url('#{$path}/#{$name}.ttf?v=#{$ver}') format('truetype'),
+        url('#{$path}/#{$name}.svg?v=#{$ver}##{$name}') format('svg');
+
+  @if content-exists() {
+    @content;
+  }
+  @else {
+    font-weight: normal;
+    font-style: normal;
+  }
+}
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+
+  &::before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+}
