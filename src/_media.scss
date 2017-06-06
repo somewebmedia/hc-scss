@@ -1,3 +1,5 @@
+$em-base: 16px !default;
+
 $query-breakpoints: (
   xsmall: em-calc(360),
   small: em-calc(480),
@@ -5,7 +7,15 @@ $query-breakpoints: (
   medium: em-calc(980),
   large: em-calc(1024),
   xlarge: em-calc(1200)
-);
+) !default;
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@function em-calc($px){
+  @return strip-unit($px) / strip-unit($em-base) * 1em;
+}
 
 @function query-breakpoint-val($breakpoint) {
   @if not map-has-key($query-breakpoints, $breakpoint) {
