@@ -1,4 +1,4 @@
-html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, a, p, blockquote, em, img, strong, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, article, aside, figure, footer, header, hgroup, menu, nav, section, time, mark, audio, video {
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, a, p, blockquote, em, img, strong, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, article, aside, figure, footer, header, hgroup, menu, nav, section, time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -27,17 +27,29 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
 }
 
-a, a:hover, a:active {
-  outline: none;
+a {
+  &,
+  &:hover,
+  &:active {
+    outline: none;
+  }
+
+  img {
+    border: 0;
+  }
 }
 
-img, object, embed {
-  max-width: 100.4%; // .4 for chrome sub pixel rendering bug
+:focus {
+  outline: 0;
+}
+
+iframe, object, embed {
+  max-width: 100%;
   height: auto;
   vertical-align: middle;
 }
 
-ul {
+nav ul {
   list-style: none;
 }
 
@@ -50,7 +62,7 @@ audio, canvas, progress, video {
   vertical-align: baseline;
 }
 
-blockquote {
+blockquote, q {
   quotes: none;
 
   &::before,
@@ -88,6 +100,11 @@ button {
   }
 }
 
+textarea {
+  overflow: auto;
+  resize: vertical;
+}
+
 button, input, select, textarea {
   font-family: inherit;
   margin: 0;
@@ -112,10 +129,6 @@ select {
   }
 }
 
-textarea {
-  overflow: auto;
-}
-
 table {
   border-collapse: separate;
   border-spacing: 0;
@@ -126,18 +139,13 @@ caption, th, td {
   text-align: left;
 }
 
-a img {
-  border: 0;
+del {
+  text-decoration: line-through;
 }
 
-:focus {
-  outline: 0;
-}
-
-textarea {
-  resize: vertical;
-}
-
-iframe {
-  max-width: 100%;
+abbr, dfn {
+  &[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+  }
 }
