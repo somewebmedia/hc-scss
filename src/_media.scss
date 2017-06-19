@@ -26,26 +26,26 @@ $query-breakpoints: (
   }
 }
 
-@mixin media($from, $to:'') {
-  @if $to == '<' {
-    @media screen and (max-width:#{query-breakpoint-val($from) - em-calc(1)}) {
+@mixin media($from, $to:'', $prop:width) {
+  @if $from == 0 {
+    @media screen and (max-#{$prop}:#{query-breakpoint-val($to) - em-calc(1)}) {
       @content;
     }
   }
-  @else if $to == '' or $to == '>' {
-    @media screen and (min-width:#{query-breakpoint-val($from)}) {
+  @else if $to == '' or $to == infinite {
+    @media screen and (min-#{$prop}:#{query-breakpoint-val($from)}) {
       @content;
     }
   }
   @else {
-    @media screen and (min-width:#{query-breakpoint-val($from)}) and (max-width:#{query-breakpoint-val($to) - em-calc(1)}) {
+    @media screen and (min-#{$prop}:#{query-breakpoint-val($from)}) and (max-#{$prop}:#{query-breakpoint-val($to) - em-calc(1)}) {
       @content;
     }
   }
 }
 
-@mixin media_down($from) {
-  @include media($from, '<') {
+@mixin media_down($to) {
+  @include media(0, $to) {
     @content;
   }
 }
