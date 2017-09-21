@@ -71,7 +71,7 @@ $wrapper-max-width: 1170px !default;
 
 @mixin wrapper($max-width:$wrapper-max-width) {
   width: 100%;
-  max-width: #{$max-width + ($grid-gutter * 2)};
+  max-width: $max-width + ($grid-gutter * 2);
   position: relative;
   padding-left: $grid-gutter-small;
   padding-right: $grid-gutter-small;
