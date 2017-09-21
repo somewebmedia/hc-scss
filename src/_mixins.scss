@@ -1,29 +1,3 @@
-@import './media';
-@import './grid';
-
-
-$wrapper-max-width: 1200px !default;
-
-@mixin wrapper($max-width:$wrapper-max-width) {
-  width: 100%;
-  max-width: #{$max-width};
-  position: relative;
-  padding-left: $grid-gutter-small;
-  padding-right: $grid-gutter-small;
-  margin: auto;
-
-  @include media(smedium) {
-    padding-left: $grid-gutter-medium;
-    padding-right: $grid-gutter-medium;
-  }
-
-  @include media(xlarge) {
-    padding-left: $grid-gutter;
-    padding-right: $grid-gutter;
-  }
-}
-
-
 @mixin clearfix {
   zoom: 1;
 

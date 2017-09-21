@@ -4,6 +4,7 @@ $grid-count: 12 !default;
 $grid-gutter-small: 16px !default;
 $grid-gutter-medium: 20px !default;
 $grid-gutter: 30px !default;
+$wrapper-max-width: 1170px !default;
 
 @mixin grid-row {
   @include clearfix;
@@ -65,5 +66,24 @@ $grid-gutter: 30px !default;
     padding-left: $grid-gutter / 2;
     padding-right: $grid-gutter / 2;
     padding-bottom: $grid-gutter;
+  }
+}
+
+@mixin wrapper($max-width:$wrapper-max-width) {
+  width: 100%;
+  max-width: #{$max-width + ($grid-gutter * 2)};
+  position: relative;
+  padding-left: $grid-gutter-small;
+  padding-right: $grid-gutter-small;
+  margin: auto;
+
+  @include media(smedium) {
+    padding-left: $grid-gutter-medium;
+    padding-right: $grid-gutter-medium;
+  }
+
+  @include media(xlarge) {
+    padding-left: $grid-gutter;
+    padding-right: $grid-gutter;
   }
 }
