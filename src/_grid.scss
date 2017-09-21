@@ -1,9 +1,9 @@
 @import './media';
 
-$grid-count: 12;
-$grid-gutter-small: 16px;
-$grid-gutter-medium: 20px;
-$grid-gutter: 30px;
+$grid-count: 12 !default;
+$grid-gutter-small: 16px !default;
+$grid-gutter-medium: 20px !default;
+$grid-gutter: 30px !default;
 
 @mixin grid-row {
   @include clearfix;
