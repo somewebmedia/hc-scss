@@ -9,16 +9,16 @@ $wrapper-max-width: 1170px !default;
 @mixin grid-row {
   @include clearfix;
   position: relative;
+  display: block;
   flex-wrap: wrap;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
   margin-left: -($grid-gutter-small / 2);
   margin-right: -($grid-gutter-small / 2);
 
   @include media(smedium) {
     display: flex;
-    flex-direction: row;
-
-    align-items: stretch;
-    justify-content: center;
     margin-left: -($grid-gutter-medium / 2);
     margin-right: -($grid-gutter-medium / 2);
   }
