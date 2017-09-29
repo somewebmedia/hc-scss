@@ -4,9 +4,29 @@ $grid-count: 12 !default;
 $grid-gutter-small: 16px !default;
 $grid-gutter-medium: 20px !default;
 $grid-gutter: 30px !default;
-$wrapper-max-width: 1170px !default;
+$grid-breakpoint-medium: smedium !default;
+$grid-breakpoint-large: xlarge !default;
 
-@mixin grid-row {
+$wrapper-max-width: 1170px !default;
+$wrapper-gutter-small: 10px !default;
+$wrapper-gutter-medium: 15px !default;
+$wrapper-gutter: 30px !default;
+
+@mixin grid-row($gutter:()) {
+  $_gutter-large: $grid-gutter;
+  $_gutter-medium: $grid-gutter-medium;
+  $_gutter-small: $grid-gutter-small;
+
+  @if map-has-key($gutter, gutter) {
+    $_gutter-large: map-get($gutter, gutter);
+  }
+  @if map-has-key($gutter, gutter-medium) {
+    $_gutter-medium: map-get($gutter, gutter-medium);
+  }
+  @if map-has-key($gutter, gutter-small) {
+    $_gutter-small: map-get($gutter, gutter-small);
+  }
+
   @include clearfix;
   position: relative;
   display: block;
@@ -14,46 +34,60 @@ $wrapper-max-width: 1170px !default;
   flex-direction: row;
   align-items: stretch;
   justify-content: center;
-  margin-left: -($grid-gutter-small / 2);
-  margin-right: -($grid-gutter-small / 2);
+  margin-left: -($_gutter-small / 2);
+  margin-right: -($_gutter-small / 2);
 
-  @include media(smedium) {
+  @include media($grid-breakpoint-medium) {
     display: flex;
-    margin-left: -($grid-gutter-medium / 2);
-    margin-right: -($grid-gutter-medium / 2);
+    margin-left: -($_gutter-medium / 2);
+    margin-right: -($_gutter-medium / 2);
   }
 
-  @include media(xlarge) {
-    margin-left: -($grid-gutter / 2);
-    margin-right: -($grid-gutter / 2);
+  @include media($grid-breakpoint-large) {
+    margin-left: -($_gutter-large / 2);
+    margin-right: -($_gutter-large / 2);
   }
 
   &:last-child {
-    margin-bottom: -$grid-gutter-small;
+    margin-bottom: -$_gutter-small;
 
-    @include media(smedium) {
-      margin-bottom: -$grid-gutter-medium;
+    @include media($grid-breakpoint-medium) {
+      margin-bottom: -$_gutter-medium;
     }
 
-    @include media(xlarge) {
-      margin-bottom: -$grid-gutter;
+    @include media($grid-breakpoint-large) {
+      margin-bottom: -$_gutter-large;
     }
   }
 }
 
-@mixin grid-column($columns) {
-  padding-left: $grid-gutter-small / 2;
-  padding-right: $grid-gutter-small / 2;
-  padding-bottom: $grid-gutter-small;
+@mixin grid-column($columns, $gutter:()) {
+  $_gutter-large: $grid-gutter;
+  $_gutter-medium: $grid-gutter-medium;
+  $_gutter-small: $grid-gutter-small;
 
-  @include media(smedium) {
+  @if map-has-key($gutter, gutter) {
+    $_gutter-large: map-get($gutter, gutter);
+  }
+  @if map-has-key($gutter, gutter-medium) {
+    $_gutter-medium: map-get($gutter, gutter-medium);
+  }
+  @if map-has-key($gutter, gutter-small) {
+    $_gutter-small: map-get($gutter, gutter-small);
+  }
+
+  padding-left: $_gutter-small / 2;
+  padding-right: $_gutter-small / 2;
+  padding-bottom: $_gutter-small;
+
+  @include media($grid-breakpoint-medium) {
     float: left;
     width: (6 / $grid-count * 100) + %; // 2 rows
     flex: 0 0 (6 / $grid-count * 100) + %;
     max-width: (6 / $grid-count * 100) + %;
-    padding-left: $grid-gutter-medium / 2;
-    padding-right: $grid-gutter-medium / 2;
-    padding-bottom: $grid-gutter-medium;
+    padding-left: $_gutter-medium / 2;
+    padding-right: $_gutter-medium / 2;
+    padding-bottom: $_gutter-medium;
   }
 
   @include media(large) {
@@ -62,28 +96,28 @@ $wrapper-max-width: 1170px !default;
     max-width: ($columns / $grid-count * 100) + %;
   }
 
-  @include media(xlarge) {
-    padding-left: $grid-gutter / 2;
-    padding-right: $grid-gutter / 2;
-    padding-bottom: $grid-gutter;
+  @include media($grid-breakpoint-large) {
+    padding-left: $_gutter-large / 2;
+    padding-right: $_gutter-large / 2;
+    padding-bottom: $_gutter-large;
   }
 }
 
 @mixin wrapper($max-width:$wrapper-max-width) {
   width: 100%;
-  max-width: $max-width + ($grid-gutter * 2);
+  max-width: $max-width + ($wrapper-gutter * 2);
   position: relative;
-  padding-left: $grid-gutter-small;
-  padding-right: $grid-gutter-small;
+  padding-left: $wrapper-gutter-small;
+  padding-right: $wrapper-gutter-small;
   margin: auto;
 
-  @include media(smedium) {
-    padding-left: $grid-gutter-medium;
-    padding-right: $grid-gutter-medium;
+  @include media($grid-breakpoint-medium) {
+    padding-left: $wrapper-gutter-medium;
+    padding-right: $wrapper-gutter-medium;
   }
 
-  @include media(xlarge) {
-    padding-left: $grid-gutter;
-    padding-right: $grid-gutter;
+  @include media($grid-breakpoint-large) {
+    padding-left: $wrapper-gutter;
+    padding-right: $wrapper-gutter;
   }
 }
