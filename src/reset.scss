@@ -17,6 +17,9 @@ html {
 
 body {
   line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+  -moz-osx-font-smoothing: grayscale;
 
   * {
     box-sizing: border-box;
