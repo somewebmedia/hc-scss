@@ -1,61 +1,31 @@
 @import './media';
 
-.alignnone {
-  margin: 5px 20px 20px 0;
+.alignnone,
+.alignleft,
+.alignright {
+  display: inline-block;
 }
 
-.aligncenter,
-div.aligncenter {
+.alignnone {
+  margin: 0 20px 20px 0;
+}
+
+.aligncenter {
   display: block;
-  margin: 5px auto 5px auto;
+  margin: 0 auto 20px;
   text-align: center;
 }
 
 .alignright {
   float: right;
   text-align: right;
-  margin: 5px 0 20px 20px;
+  margin: 0 0 20px 20px;
 }
 
 .alignleft {
   float: left;
   text-align: left;
-  margin: 5px 20px 20px 0;
-}
-
-a {
-  img {
-
-    &.alignright {
-      float: right;
-      margin: 5px 0 20px 20px;
-    }
-
-    &.alignnone {
-      margin: 5px 20px 20px 0;
-    }
-
-    &.alignleft {
-      float: left;
-      margin: 5px 20px 20px 0;
-    }
-
-    &.aligncenter {
-      display: block;
-      margin-left: auto;
-      margin-right: auto
-    }
-  }
-}
-
-@include media_down(medium) {
-  .alignnone,
-  .alignleft,
-  .alignright {
-    float: none;
-    margin: auto;
-    display: block;
-  }
+  margin: 0 20px 20px 0;
 }
 
 .wp-caption {
@@ -64,18 +34,6 @@ a {
   max-width: 96%; /* Image does not overflow the content area */
   padding: 7px 3px;
   text-align: center;
-
-  &.alignnone {
-    margin: 5px 20px 20px 0;
-  }
-
-  &.alignleft {
-    margin: 5px 20px 20px 0;
-  }
-
-  &.alignright {
-    margin: 5px 0 20px 20px;
-  }
 
   img,
   a img {
@@ -87,7 +45,7 @@ a {
     width: auto;
   }
 
-  p.wp-caption-text {
+  .wp-caption-text {
     font-size: 13px;
     line-height: 17px;
     margin: 0;
