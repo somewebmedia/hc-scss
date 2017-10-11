@@ -1,32 +1,26 @@
 @import './media';
 
 $grid-count: 12 !default;
+
 $grid-gutter-small: 16px !default;
 $grid-gutter-medium: 20px !default;
-$grid-gutter: 30px !default;
-$grid-breakpoint-medium: smedium !default;
+$grid-gutter-large: 30px !default;
+$grid-gutter: false !default;
+
+$grid-breakpoint-small: smedium !default;
+$grid-breakpoint-medium: large !default;
 $grid-breakpoint-large: xlarge !default;
 
+
 $wrapper-max-width: 1170px !default;
+
 $wrapper-gutter-small: 10px !default;
 $wrapper-gutter-medium: 15px !default;
-$wrapper-gutter: 30px !default;
+$wrapper-gutter-large: 30px !default;
+$wrapper-gutter: false !default;
 
-@mixin grid-row($gutter:()) {
-  $_gutter-large: $grid-gutter;
-  $_gutter-medium: $grid-gutter-medium;
-  $_gutter-small: $grid-gutter-small;
 
-  @if map-has-key($gutter, gutter) {
-    $_gutter-large: map-get($gutter, gutter);
-  }
-  @if map-has-key($gutter, gutter-medium) {
-    $_gutter-medium: map-get($gutter, gutter-medium);
-  }
-  @if map-has-key($gutter, gutter-small) {
-    $_gutter-small: map-get($gutter, gutter-small);
-  }
-
+@mixin grid-row($gutter:(), $breakpoints:true) {
   @include clearfix;
   position: relative;
   display: block;
@@ -34,90 +28,264 @@ $wrapper-gutter: 30px !default;
   flex-direction: row;
   align-items: stretch;
   justify-content: center;
-  margin-left: -($_gutter-small / 2);
-  margin-right: -($_gutter-small / 2);
 
-  @include media($grid-breakpoint-medium) {
-    display: flex;
-    margin-left: -($_gutter-medium / 2);
-    margin-right: -($_gutter-medium / 2);
-  }
+  @if $breakpoints == true or type-of($breakpoints) == 'map' {
 
-  @include media($grid-breakpoint-large) {
-    margin-left: -($_gutter-large / 2);
-    margin-right: -($_gutter-large / 2);
-  }
+    // Breakpoints
 
-  &:last-child {
-    margin-bottom: -$_gutter-small;
+    $_bp-large: $grid-breakpoint-large;
+    $_bp-medium: $grid-breakpoint-medium;
+    $_bp-small: $grid-breakpoint-small;
 
-    @include media($grid-breakpoint-medium) {
-      margin-bottom: -$_gutter-medium;
+    @if type-of($breakpoints) == 'map' {
+      @if map-has-key($breakpoints, large) {
+        $_bp-large: map-get($breakpoints, large);
+      }
+      @if map-has-key($breakpoints, medium) {
+        $_bp-medium: map-get($breakpoints, medium);
+      }
+      @if map-has-key($breakpoints, small) {
+        $_bp-small: map-get($breakpoints, small);
+      }
     }
 
-    @include media($grid-breakpoint-large) {
-      margin-bottom: -$_gutter-large;
+    // Gutters
+
+    $_gutter-large: $grid-gutter-large;
+    $_gutter-medium: $grid-gutter-medium;
+    $_gutter-small: $grid-gutter-small;
+
+    @if type-of($gutter) == 'number' {
+      $_gutter-large: $gutter;
+      $_gutter-medium: $gutter;
+      $_gutter-small: $gutter;
+    }
+    @else {
+      @if map-has-key($gutter, large) {
+        $_gutter-large: map-get($gutter, large);
+      }
+      @if map-has-key($gutter, medium) {
+        $_gutter-medium: map-get($gutter, medium);
+      }
+      @if map-has-key($gutter, small) {
+        $_gutter-small: map-get($gutter, small);
+      }
+    }
+
+    @if $_gutter-small > 0 {
+      margin-left: -($_gutter-small / 2);
+      margin-right: -($_gutter-small / 2);
+    }
+
+    @if $_bp-small {
+      @include media($_bp-small) {
+        display: flex;
+
+        @if $_gutter-medium > 0 {
+          margin-left: -($_gutter-medium / 2);
+          margin-right: -($_gutter-medium / 2);
+        }
+      }
+    }
+
+    @if $_bp-large {
+      @include media($_bp-large) {
+
+        @if $_bp-small == false {
+          display: flex;
+        }
+
+        @if $_gutter-large > 0 {
+          margin-left: -($_gutter-large / 2);
+          margin-right: -($_gutter-large / 2);
+        }
+      }
+    }
+
+    &:last-child {
+      @if $_gutter-small > 0 {
+        margin-bottom: -$_gutter-small;
+      }
+
+      @if $_bp-medium {
+        @include media($_bp-medium) {
+          @if $_gutter-medium > 0 {
+            margin-bottom: -$_gutter-medium;
+          }
+        }
+      }
+
+      @if $_bp-large {
+        @include media($grid-breakpoint-large) {
+          @if $_gutter-large > 0 {
+            margin-bottom: -$_gutter-large;
+          }
+        }
+      }
+    }
+  }
+  @else {
+    $_gutter: $grid-gutter;
+    @if type-of($gutter) == 'number' {
+      $_gutter: $gutter;
+    }
+
+    display: flex;
+
+    @if $_gutter {
+      margin-left: -($_gutter / 2);
+      margin-right: -($_gutter / 2);
+
+      &:last-child {
+        margin-bottom: -$_gutter;
+      }
     }
   }
 }
 
-@mixin grid-column($columns, $gutter:()) {
-  $_gutter-large: $grid-gutter;
-  $_gutter-medium: $grid-gutter-medium;
-  $_gutter-small: $grid-gutter-small;
+@mixin grid-column($columns, $gutter:(), $breakpoints:true) {
 
-  @if map-has-key($gutter, gutter) {
-    $_gutter-large: map-get($gutter, gutter);
-  }
-  @if map-has-key($gutter, gutter-medium) {
-    $_gutter-medium: map-get($gutter, gutter-medium);
-  }
-  @if map-has-key($gutter, gutter-small) {
-    $_gutter-small: map-get($gutter, gutter-small);
-  }
+  @if $breakpoints == true or type-of($breakpoints) == 'map' {
 
-  padding-left: $_gutter-small / 2;
-  padding-right: $_gutter-small / 2;
-  padding-bottom: $_gutter-small;
+    // Breakpoints
 
-  @include media($grid-breakpoint-medium) {
+    $_bp-large: $grid-breakpoint-large;
+    $_bp-medium: $grid-breakpoint-medium;
+    $_bp-small: $grid-breakpoint-small;
+
+    @if type-of($breakpoints) == 'map' {
+      @if map-has-key($breakpoints, large) {
+        $_bp-large: map-get($breakpoints, large);
+      }
+      @if map-has-key($breakpoints, medium) {
+        $_bp-medium: map-get($breakpoints, medium);
+      }
+      @if map-has-key($breakpoints, small) {
+        $_bp-small: map-get($breakpoints, small);
+      }
+    }
+
+    // Gutters
+
+    $_gutter-large: $grid-gutter-large;
+    $_gutter-medium: $grid-gutter-medium;
+    $_gutter-small: $grid-gutter-small;
+
+    @if type-of($gutter) == 'number' {
+      $_gutter-large: $gutter;
+      $_gutter-medium: $gutter;
+      $_gutter-small: $gutter;
+    }
+    @else {
+      @if map-has-key($gutter, large) {
+        $_gutter-large: map-get($gutter, large);
+      }
+      @if map-has-key($gutter, medium) {
+        $_gutter-medium: map-get($gutter, medium);
+      }
+      @if map-has-key($gutter, small) {
+        $_gutter-small: map-get($gutter, small);
+      }
+    }
+
+    @if $_gutter-small > 0 {
+      padding-left: $_gutter-small / 2;
+      padding-right: $_gutter-small / 2;
+      padding-bottom: $_gutter-small;
+    }
+
+    @if $_bp-small {
+      @include media($_bp-small) {
+        float: left;
+        width: (6 / $grid-count * 100) + %; // force 2 rows
+        flex: 0 0 (6 / $grid-count * 100) + %;
+        max-width: (6 / $grid-count * 100) + %;
+
+        @if $_gutter-medium > 0 {
+          padding-left: $_gutter-medium / 2;
+          padding-right: $_gutter-medium / 2;
+          padding-bottom: $_gutter-medium;
+        }
+      }
+    }
+
+    @if $_bp-medium {
+      @include media($_bp-medium) {
+        width: ($columns / $grid-count * 100) + %;
+        flex: 0 0 ($columns / $grid-count * 100) + %;
+        max-width: ($columns / $grid-count * 100) + %;
+      }
+    }
+
+    @if $_bp-large {
+      @include media($_bp-large) {
+
+        @if $_bp-medium == false {
+          width: ($columns / $grid-count * 100) + %;
+          flex: 0 0 ($columns / $grid-count * 100) + %;
+          max-width: ($columns / $grid-count * 100) + %;
+        }
+
+        @if $_gutter-large > 0 {
+          padding-left: $_gutter-large / 2;
+          padding-right: $_gutter-large / 2;
+          padding-bottom: $_gutter-large;
+        }
+      }
+    }
+  }
+  @else {
+    $_gutter: $grid-gutter;
+    @if type-of($gutter) == 'number' {
+      $_gutter: $gutter;
+    }
+
     float: left;
-    width: (6 / $grid-count * 100) + %; // 2 rows
-    flex: 0 0 (6 / $grid-count * 100) + %;
-    max-width: (6 / $grid-count * 100) + %;
-    padding-left: $_gutter-medium / 2;
-    padding-right: $_gutter-medium / 2;
-    padding-bottom: $_gutter-medium;
-  }
-
-  @include media(large) {
     width: ($columns / $grid-count * 100) + %;
     flex: 0 0 ($columns / $grid-count * 100) + %;
     max-width: ($columns / $grid-count * 100) + %;
-  }
-
-  @include media($grid-breakpoint-large) {
-    padding-left: $_gutter-large / 2;
-    padding-right: $_gutter-large / 2;
-    padding-bottom: $_gutter-large;
+    padding-left: $_gutter / 2;
+    padding-right: $_gutter / 2;
+    padding-bottom: $_gutter;
   }
 }
 
-@mixin wrapper($max-width:$wrapper-max-width) {
+@mixin wrapper($max-width:$wrapper-max-width, $gutter:()) {
+  $_gutter-large: $wrapper-gutter-large;
+  $_gutter-medium: $wrapper-gutter-medium;
+  $_gutter-small: $wrapper-gutter-small;
+
+  @if type-of($gutter) == 'number' {
+    $_gutter-large: $gutter;
+    $_gutter-medium: $gutter;
+    $_gutter-small: $gutter;
+  }
+  @else {
+    @if map-has-key($gutter, large) {
+      $_gutter-large: map-get($gutter, large);
+    }
+    @if map-has-key($gutter, medium) {
+      $_gutter-medium: map-get($gutter, medium);
+    }
+    @if map-has-key($gutter, small) {
+      $_gutter-small: map-get($gutter, small);
+    }
+  }
+
   width: 100%;
-  max-width: $max-width + ($wrapper-gutter * 2);
+  max-width: $max-width + ($_gutter-large * 2);
   position: relative;
-  padding-left: $wrapper-gutter-small;
-  padding-right: $wrapper-gutter-small;
+  padding-left: $_gutter-small;
+  padding-right: $_gutter-small;
   margin: auto;
 
-  @include media($grid-breakpoint-medium) {
-    padding-left: $wrapper-gutter-medium;
-    padding-right: $wrapper-gutter-medium;
+  @include media($grid-breakpoint-small) {
+    padding-left: $_gutter-medium;
+    padding-right: $_gutter-medium;
   }
 
   @include media($grid-breakpoint-large) {
-    padding-left: $wrapper-gutter;
-    padding-right: $wrapper-gutter;
+    padding-left: $_gutter-large;
+    padding-right: $_gutter-large;
   }
 }
