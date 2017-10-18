@@ -23,7 +23,7 @@ $wrapper-gutter: false !default;
 @mixin grid-row($gutter:(), $breakpoints:true) {
   @include clearfix;
   position: relative;
-  display: block;
+  display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: stretch;
@@ -79,7 +79,6 @@ $wrapper-gutter: false !default;
 
     @if $_bp-small {
       @include media($_bp-small) {
-        display: flex;
 
         @if $_gutter-medium > 0 {
           margin-left: -($_gutter-medium / 2);
@@ -130,8 +129,6 @@ $wrapper-gutter: false !default;
       $_gutter: $gutter;
     }
 
-    display: flex;
-
     @if $_gutter {
       margin-left: -($_gutter / 2);
       margin-right: -($_gutter / 2);
@@ -144,6 +141,9 @@ $wrapper-gutter: false !default;
 }
 
 @mixin grid-column($columns, $gutter:(), $breakpoints:true) {
+  width: 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
 
   @if $breakpoints == true or type-of($breakpoints) == 'map' {
 
