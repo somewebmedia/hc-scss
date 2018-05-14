@@ -41,3 +41,16 @@
     padding-top: ($height / $width) * 100%;
   }
 }
+
+
+@mixin hide-element($duration:.15s, $timing:ease) {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity $duration $timing;
+}
+
+
+@mixin show-element {
+  opacity: 1;
+  visibility: visible;
+}
