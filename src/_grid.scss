@@ -27,7 +27,7 @@ $wrapper-gutter: false !default;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: stretch;
-  justify-content: center;
+  justify-content: flex-start;
 
   @if $breakpoints == true or type-of($breakpoints) == 'map' {
 
