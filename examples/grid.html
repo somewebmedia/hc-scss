@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../dist/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="style.css" type="text/css" media="all">
+
+  </head>
+
+  <body>
+
+    <div id="container">
+
+      <div class="wrapper">
+
+        <div id="auto-layout-columns">
+
+          <h2>Auto-layout</h2>
+
+          <div class="table">
+            <div class="row">
+              <div class="col">
+                1 of 2
+              </div>
+              <div class="col">
+                2 of 2
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                1 of 3
+              </div>
+              <div class="col">
+                2 of 3
+              </div>
+              <div class="col">
+                3 of 3
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div id="multi-row-columns">
+
+          <h2>Multi-row</h2>
+
+          <div class="table">
+            <div class="row">
+              <div class="col">Column</div>
+              <div class="col">Column</div>
+              <div class="w-100"></div>
+              <div class="col">Column</div>
+              <div class="col">Column</div>
+              <div class="col">Column</div>
+              <div class="w-100"></div>
+              <div class="col">Column</div>
+              <div class="col">Column</div>
+              <div class="col">Column</div>
+              <div class="col">Column</div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div id="custom-width-columns">
+
+          <h2>Custom width</h2>
+
+          <div class="table">
+            <div class="row">
+              <div class="col">
+                1 of 3
+              </div>
+              <div class="col-6">
+                2 of 3 (wider)
+              </div>
+              <div class="col">
+                3 of 3
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                1 of 3
+              </div>
+              <div class="col-5">
+                2 of 3 (wider)
+              </div>
+              <div class="col">
+                3 of 3
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div id="custom-breakpoints-columns">
+
+          <h2>Custom breakpoints</h2>
+
+          <div class="table">
+            <div class="row">
+              <div class="col-4">Column</div>
+              <div class="col-4">Column</div>
+              <div class="col-4">Column</div>
+            </div>
+            <div class="row">
+              <div class="col-2-5">Column</div>
+              <div class="col-2-5">Column</div>
+              <div class="col-2-5">Column</div>
+              <div class="col-2-5">Column</div>
+              <div class="col-2-5">Column</div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div id="row-args">
+
+          <h2>Row arguments</h2>
+
+          <div class="table">
+            <div class="row justify-center">
+              <div class="col-3">Column</div>
+              <div class="col-3">Column</div>
+              <div class="col-3">Column</div>
+            </div>
+            <div class="row justify-end">
+              <div class="col-3">Column</div>
+              <div class="col-3">Column</div>
+              <div class="col-3">Column</div>
+            </div>
+            <div class="row justify-space-between">
+              <div class="col-2">Column</div>
+              <div class="col-2">Column</div>
+              <div class="col-2">Column</div>
+              <div class="col-2">Column</div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div id="column-args">
+
+          <h2>Column arguments</h2>
+
+          <div class="table">
+            <div class="row auto">
+              <div class="col-3">Column</div>
+              <div class="col-custom">Column</div>
+              <div class="col-3">Column</div>
+            </div>
+            <div class="row justify-end">
+              <div class="col-3">Column</div>
+              <div class="col-3">Column</div>
+              <div class="col-custom">Column</div>
+            </div>
+            <div class="row justify-center">
+              <div class="col-3">Column</div>
+              <div class="col-custom">Column</div>
+              <div class="col-3">Column</div>
+            </div>
+            <div class="row order">
+              <div class="col-3">Column 1</div>
+              <div class="col-3">Column 2</div>
+              <div class="col-custom">Column 3</div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div id="nesting">
+
+          <h2>Nesting</h2>
+
+          <div class="table">
+            <div class="row">
+              <div class="col-4">Column</div>
+              <div class="col-8">
+                Column
+
+                <div class="row">
+                  <div class="col-6">Column</div>
+                  <div class="col-6">Column</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </body>
+</html>

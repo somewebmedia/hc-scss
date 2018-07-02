@@ -1,291 +1,299 @@
+@import './mixins';
 @import './media';
 
 $grid-count: 12 !default;
-
-$grid-gutter-small: 16px !default;
-$grid-gutter-medium: 20px !default;
-$grid-gutter-large: 30px !default;
-$grid-gutter: false !default;
-
-$grid-breakpoint-small: smedium !default;
-$grid-breakpoint-medium: large !default;
-$grid-breakpoint-large: xlarge !default;
-
+$grid-gutters: 16px !default;
 
 $wrapper-max-width: 1170px !default;
+$wrapper-gutters: 20px !default;
 
-$wrapper-gutter-small: 10px !default;
-$wrapper-gutter-medium: 15px !default;
-$wrapper-gutter-large: 30px !default;
-$wrapper-gutter: false !default;
+@function grid-format-val($val) {
+  @if $val == ltr {
+    @return row;
+  }
+  @elseif $val == rtl {
+    @return row-reverse;
+  }
+  @elseif $val == start {
+    @return flex-start;
+  }
+  @elseif $val == end {
+    @return flex-end;
+  }
+  @return $val;
+}
 
+/**
+ * @gutters
+ *   {number}  20px
+ *   {map}     (breakpoint: 10px, breakpoint: 15px)
+ *   {bool}    false
+ */
+@mixin grid-container($gutters: $grid-gutters) {
+  @if $gutters != false {
 
-@mixin grid-row($gutter:(), $breakpoints:true) {
-  @include clearfix;
+    @if type-of($gutters) == 'number' {
+      padding-left: $gutters / 2;
+      padding-right: $gutters / 2;
+    }
+    @elseif type-of($gutters) == 'map' {
+      @each $gutter in $gutters {
+        $breakpoint: nth($gutter, 1);
+        $padding: nth($gutter, 2);
+
+        @if $breakpoint == 'default' {
+          padding-left: $padding / 2;
+          padding-right: $padding / 2;
+        }
+        @else {
+          @include media($breakpoint) {
+            padding-left: $padding / 2;
+            padding-right: $padding / 2;
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * @gutters
+ *   {number}  20px
+ *   {map}     (breakpoint: 10px, breakpoint: 15px)
+ *   {bool}    false
+ *
+ * @args
+ *   {map}
+ *      direction  rtl | ltr
+ *      justify    start | end | center | space-between | space-around | space-evenly
+ *      align      auto | start | end | center | baseline | stretch
+ */
+@mixin grid-row($gutters: $grid-gutters, $args: ()) {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-start;
 
-  @if $breakpoints == true or type-of($breakpoints) == 'map' {
+  @if $gutters != false {
 
-    // Breakpoints
-
-    $_bp-large: $grid-breakpoint-large;
-    $_bp-medium: $grid-breakpoint-medium;
-    $_bp-small: $grid-breakpoint-small;
-
-    @if type-of($breakpoints) == 'map' {
-      @if map-has-key($breakpoints, large) {
-        $_bp-large: map-get($breakpoints, large);
-      }
-      @if map-has-key($breakpoints, medium) {
-        $_bp-medium: map-get($breakpoints, medium);
-      }
-      @if map-has-key($breakpoints, small) {
-        $_bp-small: map-get($breakpoints, small);
-      }
+    @if type-of($gutters) == 'number' {
+      margin-left: -($gutters / 2);
+      margin-right: -($gutters / 2);
     }
+    @elseif type-of($gutters) == 'map' {
+      @each $gutter in $gutters {
+        $breakpoint: nth($gutter, 1);
+        $margin: nth($gutter, 2);
 
-    // Gutters
-
-    $_gutter-large: $grid-gutter-large;
-    $_gutter-medium: $grid-gutter-medium;
-    $_gutter-small: $grid-gutter-small;
-
-    @if type-of($gutter) == 'number' {
-      $_gutter-large: $gutter;
-      $_gutter-medium: $gutter;
-      $_gutter-small: $gutter;
-    }
-    @else {
-      @if map-has-key($gutter, large) {
-        $_gutter-large: map-get($gutter, large);
-      }
-      @if map-has-key($gutter, medium) {
-        $_gutter-medium: map-get($gutter, medium);
-      }
-      @if map-has-key($gutter, small) {
-        $_gutter-small: map-get($gutter, small);
-      }
-    }
-
-    @if $_gutter-small > 0 {
-      margin-left: -($_gutter-small / 2);
-      margin-right: -($_gutter-small / 2);
-    }
-
-    @if $_bp-small {
-      @include media($_bp-small) {
-
-        @if $_gutter-medium > 0 {
-          margin-left: -($_gutter-medium / 2);
-          margin-right: -($_gutter-medium / 2);
+        @if $breakpoint == 'default' {
+          margin-left: -($margin / 2);
+          margin-right: -($margin / 2);
         }
-      }
-    }
-
-    @if $_bp-large {
-      @include media($_bp-large) {
-
-        @if $_bp-small == false {
-          display: flex;
-        }
-
-        @if $_gutter-large > 0 {
-          margin-left: -($_gutter-large / 2);
-          margin-right: -($_gutter-large / 2);
-        }
-      }
-    }
-
-    &:last-child {
-      @if $_gutter-small > 0 {
-        margin-bottom: -$_gutter-small;
-      }
-
-      @if $_bp-medium {
-        @include media($_bp-medium) {
-          @if $_gutter-medium > 0 {
-            margin-bottom: -$_gutter-medium;
-          }
-        }
-      }
-
-      @if $_bp-large {
-        @include media($grid-breakpoint-large) {
-          @if $_gutter-large > 0 {
-            margin-bottom: -$_gutter-large;
+        @else {
+          @include media($breakpoint) {
+            margin-left: -($margin / 2);
+            margin-right: -($margin / 2);
           }
         }
       }
     }
   }
-  @else {
-    $_gutter: $grid-gutter;
-    @if type-of($gutter) == 'number' {
-      $_gutter: $gutter;
+
+  // arguments
+
+  @if not map-has-key($args, direction) {
+    flex-direction: row;
+  }
+
+  @if not map-has-key($args, justify) {
+    justify-content: flex-start;
+  }
+
+  @if not map-has-key($args, align) {
+    align-items: stretch;
+  }
+
+  @each $arg in $args {
+    $prop: nth($arg, 1);
+    $val: nth($arg, 2);
+
+    @if $prop == direction {
+      flex-direction: grid-format-val($val);
     }
-
-    @if $_gutter {
-      margin-left: -($_gutter / 2);
-      margin-right: -($_gutter / 2);
-
-      &:last-child {
-        margin-bottom: -$_gutter;
-      }
+    @elseif $prop == justify {
+      justify-content: grid-format-val($val);
+    }
+    @elseif $prop == align {
+      align-items: grid-format-val($val);
     }
   }
 }
 
-@mixin grid-column($columns, $gutter:(), $breakpoints:true) {
-  width: 100%;
-  flex: 0 0 100%;
+/**
+ * @$columns
+ *   {string}  auto | responsive
+ *   {number}  6
+ *   {map}     (small: 2, medium: 3, large: 4)
+ *
+ * @gutters
+ *   {number}  20px
+ *   {map}     (breakpoint: 10px, breakpoint: 15px)
+ *   {bool}    false
+ *
+ * @args
+ *   {map}
+ *      grow     true | false
+ *      order    0
+ *      align    auto | start | end | center | baseline | stretch
+ *      justify  start | end, center
+ */
+@mixin grid-column($columns: auto, $gutters: $grid-gutters, $args: ()) {
   max-width: 100%;
 
-  @if $breakpoints == true or type-of($breakpoints) == 'map' {
+  // columns
+  @if $columns == auto {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+  @elseif $columns == responsive {
+    flex: 0 0 100%;
 
-    // Breakpoints
-
-    $_bp-large: $grid-breakpoint-large;
-    $_bp-medium: $grid-breakpoint-medium;
-    $_bp-small: $grid-breakpoint-small;
-
-    @if type-of($breakpoints) == 'map' {
-      @if map-has-key($breakpoints, large) {
-        $_bp-large: map-get($breakpoints, large);
-      }
-      @if map-has-key($breakpoints, medium) {
-        $_bp-medium: map-get($breakpoints, medium);
-      }
-      @if map-has-key($breakpoints, small) {
-        $_bp-small: map-get($breakpoints, small);
-      }
+    @include media(small) {
+      flex: 1 0 50%;
     }
 
-    // Gutters
-
-    $_gutter-large: $grid-gutter-large;
-    $_gutter-medium: $grid-gutter-medium;
-    $_gutter-small: $grid-gutter-small;
-
-    @if type-of($gutter) == 'number' {
-      $_gutter-large: $gutter;
-      $_gutter-medium: $gutter;
-      $_gutter-small: $gutter;
-    }
-    @else {
-      @if map-has-key($gutter, large) {
-        $_gutter-large: map-get($gutter, large);
-      }
-      @if map-has-key($gutter, medium) {
-        $_gutter-medium: map-get($gutter, medium);
-      }
-      @if map-has-key($gutter, small) {
-        $_gutter-small: map-get($gutter, small);
-      }
+    @include media(smedium) {
+      flex: 1 0 33.33%;
     }
 
-    @if $_gutter-small > 0 {
-      padding-left: $_gutter-small / 2;
-      padding-right: $_gutter-small / 2;
-      padding-bottom: $_gutter-small;
+    @include media(medium) {
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+  }
+  @elseif type-of($columns) == 'map' {
+
+    @if not map-has-key($columns, default) {
+      flex: 0 0 100%;
     }
 
-    @if $_bp-small {
-      @include media($_bp-small) {
-        float: left;
-        width: (6 / $grid-count * 100) + %; // force 2 rows
-        flex: 0 0 (6 / $grid-count * 100) + %;
-        max-width: (6 / $grid-count * 100) + %;
+    @each $column in $columns {
+      $breakpoint: nth($column, 1);
+      $column-count: nth($column, 2);
 
-        @if $_gutter-medium > 0 {
-          padding-left: $_gutter-medium / 2;
-          padding-right: $_gutter-medium / 2;
-          padding-bottom: $_gutter-medium;
-        }
+      @if $breakpoint == 'default' {
+        flex: 0 0 ($column-count / $grid-count * 100) + %;
       }
-    }
-
-    @if $_bp-medium {
-      @include media($_bp-medium) {
-        width: ($columns / $grid-count * 100) + %;
-        flex: 0 0 ($columns / $grid-count * 100) + %;
-        max-width: ($columns / $grid-count * 100) + %;
-      }
-    }
-
-    @if $_bp-large {
-      @include media($_bp-large) {
-
-        @if $_bp-medium == false {
-          width: ($columns / $grid-count * 100) + %;
-          flex: 0 0 ($columns / $grid-count * 100) + %;
-          max-width: ($columns / $grid-count * 100) + %;
-        }
-
-        @if $_gutter-large > 0 {
-          padding-left: $_gutter-large / 2;
-          padding-right: $_gutter-large / 2;
-          padding-bottom: $_gutter-large;
+      @else {
+        @include media($breakpoint) {
+          flex: 0 0 ($column-count / $grid-count * 100) + %;
         }
       }
     }
   }
-  @else {
-    $_gutter: $grid-gutter;
-    @if type-of($gutter) == 'number' {
-      $_gutter: $gutter;
-    }
-
-    float: left;
-    width: ($columns / $grid-count * 100) + %;
+  @elseif type-of($columns) == 'number' {
     flex: 0 0 ($columns / $grid-count * 100) + %;
-    max-width: ($columns / $grid-count * 100) + %;
-    padding-left: $_gutter / 2;
-    padding-right: $_gutter / 2;
-    padding-bottom: $_gutter;
+  }
+
+  // gutters
+  @if $gutters == default {
+    $gutters: $grid-gutters;
+  }
+
+  @if $gutters != false {
+
+    @if type-of($gutters) == 'number' {
+      padding-left: $gutters / 2;
+      padding-right: $gutters / 2;
+    }
+    @elseif type-of($gutters) == 'map' {
+      @each $gutter in $gutters {
+        $breakpoint: nth($gutter, 1);
+        $padding: nth($gutter, 2);
+
+        @if $breakpoint == 'default' {
+          padding-left: $padding / 2;
+          padding-right: $padding / 2;
+        }
+        @else {
+          @include media($breakpoint) {
+            padding-left: $padding / 2;
+            padding-right: $padding / 2;
+          }
+        }
+      }
+    }
+  }
+
+  // arguments
+  @each $arg in $args {
+    $prop: nth($arg, 1);
+    $val: nth($arg, 2);
+
+    @if $prop == grow {
+      @if $val == false {
+        flex-grow: 0;
+      }
+    }
+    @elseif $prop == justify {
+      @if $val == end {
+        margin-left: auto;
+      }
+      @elseif $val == center {
+        margin: auto;
+      }
+    }
+    @elseif $prop == align {
+      align-self: grid-format-val($val);
+    }
+    @else {
+      #{$prop}: $val;
+    }
   }
 }
 
-@mixin wrapper($max-width:$wrapper-max-width, $gutter:()) {
-  $_gutter-large: $wrapper-gutter-large;
-  $_gutter-medium: $wrapper-gutter-medium;
-  $_gutter-small: $wrapper-gutter-small;
-
-  @if type-of($gutter) == 'number' {
-    $_gutter-large: $gutter;
-    $_gutter-medium: $gutter;
-    $_gutter-small: $gutter;
-  }
-  @else {
-    @if map-has-key($gutter, large) {
-      $_gutter-large: map-get($gutter, large);
-    }
-    @if map-has-key($gutter, medium) {
-      $_gutter-medium: map-get($gutter, medium);
-    }
-    @if map-has-key($gutter, small) {
-      $_gutter-small: map-get($gutter, small);
-    }
-  }
-
+/**
+ * @max-width
+ *   {number}  20px
+ *
+ * @gutters
+ *   {number}  20px
+ *   {map}     (breakpoint: 10px, breakpoint: 15px)
+ *   {bool}    false
+ */
+@mixin wrapper($max-width: $wrapper-max-width, $gutters: $wrapper-gutters) {
   width: 100%;
-  max-width: $max-width + ($_gutter-large * 2);
   position: relative;
-  padding-left: $_gutter-small;
-  padding-right: $_gutter-small;
   margin: auto;
+  box-sizing: border-box;
 
-  @include media($grid-breakpoint-small) {
-    padding-left: $_gutter-medium;
-    padding-right: $_gutter-medium;
+  @if $max-width == default {
+    $max-width: $wrapper-max-width;
   }
 
-  @include media($grid-breakpoint-large) {
-    padding-left: $_gutter-large;
-    padding-right: $_gutter-large;
+  @if $gutters != false {
+
+    @if type-of($gutters) == 'number' {
+      padding-left: $gutters;
+      padding-right: $gutters;
+      max-width: $max-width + ($gutters * 2);
+    }
+    @elseif type-of($gutters) == 'map' {
+      @each $gutter in $gutters {
+        $breakpoint: nth($gutter, 1);
+        $padding: nth($gutter, 2);
+
+        @if $breakpoint == 'default' {
+          padding-left: $padding;
+          padding-right: $padding;
+          max-width: $max-width + ($padding * 2);
+        }
+        @else {
+          @include media($breakpoint) {
+            padding-left: $padding;
+            padding-right: $padding;
+          }
+        }
+      }
+    }
   }
 }

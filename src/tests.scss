@@ -1,0 +1,196 @@
+@import './index';
+
+@mixin col { // for testing
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background-color: rgba(86,61,124,.15);
+  border: 1px solid rgba(86,61,124,.2);
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 1.2;
+  margin: 50px 0 30px;
+}
+
+.wrapper {
+  @include wrapper;
+}
+
+.row {
+  margin-bottom: 16px;
+
+  & > div:not(.w-100) {
+    @include col;
+  }
+}
+
+// Grid Examples
+
+#auto-layout-columns {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+    @include grid-row;
+  }
+
+  .col {
+    @include grid-column(responsive);
+  }
+}
+
+#multi-row-columns {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+    @include grid-row;
+  }
+
+  .col {
+    @include grid-column(responsive);
+  }
+
+  .w-100 {
+    @include grid-column(12);
+  }
+}
+
+#custom-width-columns {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+    @include grid-row;
+  }
+
+  .col {
+    @include grid-column;
+  }
+
+  .col-5 {
+    @include grid-column(5);
+  }
+
+  .col-6 {
+    @include grid-column(6);
+  }
+}
+
+#custom-breakpoints-columns {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+    @include grid-row;
+  }
+
+  .col-4 {
+    @include grid-column((small: 6, medium: 4));
+  }
+
+  .col-2-5 {
+    @include grid-column(2.4);
+  }
+}
+
+#row-args {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+
+    &.justify-center {
+      @include grid-row(default, (justify: center));
+    }
+
+    &.justify-end {
+      @include grid-row(default, (justify: end));
+    }
+
+    &.justify-space-between {
+      @include grid-row(default, (justify: space-between));
+    }
+  }
+
+  .col-3 {
+    @include grid-column(3, default, (grow: false));
+  }
+
+  .col-2 {
+    @include grid-column(2, default, (grow: false));
+  }
+}
+
+#column-args {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+    @include grid-row;
+  }
+
+  .col-3 {
+    @include grid-column(3);
+  }
+
+  .auto {
+    .col-custom {
+      @include grid-column(auto);
+    }
+  }
+
+  .justify-end {
+    .col-custom {
+      @include grid-column(auto, default, (justify: end, grow: false));
+    }
+  }
+
+  .justify-center {
+    .col-custom {
+      @include grid-column(3, default, (justify: center, grow: false));
+    }
+  }
+
+  .order {
+    .col-custom {
+      @include grid-column(auto, default, (order: -1));
+    }
+  }
+}
+
+#nesting {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+    @include grid-row;
+  }
+
+  .col-4 {
+    @include grid-column(4);
+  }
+
+  .col-6 {
+    @include grid-column(6);
+  }
+
+  .col-8 {
+    @include grid-column(8);
+  }
+}
