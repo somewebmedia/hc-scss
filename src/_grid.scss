@@ -70,6 +70,7 @@ $wrapper-gutters: 20px !default;
  */
 @mixin grid-row($gutters: $grid-gutters, $args: ()) {
   position: relative;
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
 
@@ -147,25 +148,30 @@ $wrapper-gutters: 20px !default;
  *      justify  start | end, center
  */
 @mixin grid-column($columns: auto, $gutters: $grid-gutters, $args: ()) {
-  max-width: 100%;
+  box-sizing: border-box;
 
   // columns
   @if $columns == auto {
+    max-width: 100%;
     flex-grow: 1;
     flex-basis: 0;
   }
   @elseif $columns == responsive {
+    max-width: 100%;
     flex: 0 0 100%;
 
     @include media(small) {
+      max-width: 50%;
       flex: 1 0 50%;
     }
 
     @include media(smedium) {
+      max-width: 33.33%;
       flex: 1 0 33.33%;
     }
 
     @include media(medium) {
+      max-width: 100%;
       flex-grow: 1;
       flex-basis: 0;
     }
@@ -173,6 +179,7 @@ $wrapper-gutters: 20px !default;
   @elseif type-of($columns) == 'map' {
 
     @if not map-has-key($columns, default) {
+      max-width: 100%;
       flex: 0 0 100%;
     }
 
@@ -181,16 +188,19 @@ $wrapper-gutters: 20px !default;
       $column-count: nth($column, 2);
 
       @if $breakpoint == 'default' {
+        max-width: ($column-count / $grid-count * 100) + %;
         flex: 0 0 ($column-count / $grid-count * 100) + %;
       }
       @else {
         @include media($breakpoint) {
+          max-width: ($column-count / $grid-count * 100) + %;
           flex: 0 0 ($column-count / $grid-count * 100) + %;
         }
       }
     }
   }
   @elseif type-of($columns) == 'number' {
+    max-width: ($columns / $grid-count * 100) + %;
     flex: 0 0 ($columns / $grid-count * 100) + %;
   }
 
