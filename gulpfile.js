@@ -7,7 +7,7 @@ const vinylfs = require('vinyl-fs');
 const argv = require('yargs').argv;
 
 gulp.task('dist', [], () => {
-  return vinylfs.src(['./src/*.scss', '!.src/tests.scss'])
+  return vinylfs.src(['./src/*.scss', '!./src/tests.scss'])
     .pipe(sass({
       'outputStyle': argv.dev ? 'development' : 'compressed'
     }).on('error', sass.logError))
