@@ -1,9 +1,17 @@
 {
   "name": "hc-scss",
   "version": "0.1.2",
-  "author": "Some Web Guy",
+  "description": "Simple and lightweight scss framework, with few goodies for easier front-end development.",
+  "author": {
+    "name": "Some Web Media",
+    "url": "http://somewebmedia.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/somewebmedia/hc-scss.git"
+  },
   "sass": "src/index.scss",
-  "main": "dist/index.css",
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -12,5 +20,15 @@
     "gulp-sass": "^3.2.1",
     "yargs": "^6.6.0",
     "vinyl-fs": "^3.0.2"
-  }
+  },
+  "keywords": [
+    "css",
+    "scss",
+    "sass",
+    "mobile-first",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
+  ]
 }
