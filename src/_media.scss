@@ -34,7 +34,7 @@ $query-breakpoints: (
   }
 }
 
-@mixin media_down($to) {
+@mixin media-down($to) {
   @include media(0, $to) {
     @content;
   }
