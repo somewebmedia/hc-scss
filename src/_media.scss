@@ -1,34 +1,49 @@
-$query-breakpoints: (
-  xsmall: 360px,
-  small: 480px,
-  smedium: 640px,
-  medium: 980px,
-  large: 1024px,
-  xlarge: 1200px
-) !default;
+$media-breakpoint-xsmall: 360px !default;
+$media-breakpoint-small: 480px !default;
+$media-breakpoint-smedium: 640px !default;
+$media-breakpoint-medium: 980px !default;
+$media-breakpoint-large: 1024px !default;
+$media-breakpoint-xlarge: 1200px !default;
 
-@function query-breakpoint-val($breakpoint) {
-  @if not map-has-key($query-breakpoints, $breakpoint) {
+$media-custom-breakpoints: ();
+
+@mixin add-media-breakpoint($name, $breakpoint) {
+  $media-custom-breakpoints: map-merge($media-custom-breakpoints, ($name: $breakpoint)) !global;
+}
+
+@function media-breakpoints() {
+  @return map-merge((
+    xsmall: $media-breakpoint-xsmall,
+    small: $media-breakpoint-small,
+    smedium: $media-breakpoint-smedium,
+    medium: $media-breakpoint-medium,
+    large: $media-breakpoint-large,
+    xlarge: $media-breakpoint-xlarge
+  ), $media-custom-breakpoints);
+}
+
+@function media-breakpoint-val($breakpoint) {
+  @if not map-has-key(media-breakpoints(), $breakpoint) {
     @return $breakpoint;
   }
   @else {
-    @return map-get($query-breakpoints, $breakpoint);
+    @return map-get(media-breakpoints(), $breakpoint);
   }
 }
 
 @mixin media($from, $to:'', $prop:width) {
   @if $from == 0 {
-    @media screen and (max-#{$prop}:#{query-breakpoint-val($to) - 1px}) {
+    @media screen and (max-#{$prop}:#{media-breakpoint-val($to) - 1px}) {
       @content;
     }
   }
   @else if $to == '' or $to == infinite {
-    @media screen and (min-#{$prop}:#{query-breakpoint-val($from)}) {
+    @media screen and (min-#{$prop}:#{media-breakpoint-val($from)}) {
       @content;
     }
   }
   @else {
-    @media screen and (min-#{$prop}:#{query-breakpoint-val($from)}) and (max-#{$prop}:#{query-breakpoint-val($to) - 1px}) {
+    @media screen and (min-#{$prop}:#{media-breakpoint-val($from)}) and (max-#{$prop}:#{media-breakpoint-val($to) - 1px}) {
       @content;
     }
   }
