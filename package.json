@@ -2,6 +2,7 @@
   "name": "hc-scss",
   "version": "1.0.0",
   "description": "Simple and lightweight scss framework, with few goodies for easier front-end development.",
+  "homepage": "http://somewebmedia.com/hc-scss",
   "author": {
     "name": "Some Web Media",
     "url": "http://somewebmedia.com"
