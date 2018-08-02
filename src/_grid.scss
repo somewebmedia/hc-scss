@@ -7,6 +7,7 @@ $grid-gutters: 16px !default;
 $wrapper-max-width: 1170px !default;
 $wrapper-gutters: 20px !default;
 
+/* Helpers */
 @function grid-format-val($val) {
   @if $val == ltr {
     @return row;
@@ -21,6 +22,62 @@ $wrapper-gutters: 20px !default;
     @return flex-end;
   }
   @return $val;
+}
+
+@mixin grid-row-args($args, $media: false) {
+  @if $media == false {
+    @if not map-has-key($args, direction) {
+      flex-direction: row;
+    }
+    @if not map-has-key($args, justify) {
+      justify-content: flex-start;
+    }
+    @if not map-has-key($args, align) {
+      align-items: stretch;
+    }
+  }
+
+  @each $arg in $args {
+    $prop: nth($arg, 1);
+    $val: nth($arg, 2);
+
+    @if $prop == direction {
+      flex-direction: grid-format-val($val);
+    }
+    @elseif $prop == justify {
+      justify-content: grid-format-val($val);
+    }
+    @elseif $prop == align {
+      align-items: grid-format-val($val);
+    }
+  }
+}
+
+@mixin grid-column-args($args) {
+  @each $arg in $args {
+    $prop: nth($arg, 1);
+    $val: nth($arg, 2);
+
+    @if $prop == grow {
+      @if $val == false {
+        flex-grow: 0;
+      }
+    }
+    @elseif $prop == justify {
+      @if $val == end {
+        margin-left: auto;
+      }
+      @elseif $val == center {
+        margin: auto;
+      }
+    }
+    @elseif $prop == align {
+      align-self: grid-format-val($val);
+    }
+    @else {
+      #{$prop}: $val;
+    }
+  }
 }
 
 /**
@@ -100,31 +157,29 @@ $wrapper-gutters: 20px !default;
   }
 
   // arguments
-
-  @if not map-has-key($args, direction) {
-    flex-direction: row;
+  @if not map-has-key($args, default) or length($args) == 0 {
+    @include grid-row-args(());
   }
 
-  @if not map-has-key($args, justify) {
-    justify-content: flex-start;
-  }
+  @if length($args) > 0 {
 
-  @if not map-has-key($args, align) {
-    align-items: stretch;
-  }
+    @if type-of(nth(nth($args, 1), 2)) == 'map' {
+      @each $arg in $args {
+        $breakpoint: nth($arg, 1);
+        $bp-args: nth($arg, 2);
 
-  @each $arg in $args {
-    $prop: nth($arg, 1);
-    $val: nth($arg, 2);
-
-    @if $prop == direction {
-      flex-direction: grid-format-val($val);
+        @if $breakpoint == 'default' {
+          @include grid-row-args($bp-args);
+        }
+        @else {
+          @include media($breakpoint) {
+            @include grid-row-args($bp-args, true);
+          }
+        }
+      }
     }
-    @elseif $prop == justify {
-      justify-content: grid-format-val($val);
-    }
-    @elseif $prop == align {
-      align-items: grid-format-val($val);
+    @else {
+      @include grid-row-args($args);
     }
   }
 }
@@ -208,9 +263,7 @@ $wrapper-gutters: 20px !default;
   @if $gutters == default {
     $gutters: $grid-gutters;
   }
-
-  @if $gutters != false {
-
+  @elseif $gutters != false {
     @if type-of($gutters) == 'number' {
       padding-left: $gutters / 2;
       padding-right: $gutters / 2;
@@ -235,28 +288,25 @@ $wrapper-gutters: 20px !default;
   }
 
   // arguments
-  @each $arg in $args {
-    $prop: nth($arg, 1);
-    $val: nth($arg, 2);
+  @if length($args) > 0 {
 
-    @if $prop == grow {
-      @if $val == false {
-        flex-grow: 0;
+    @if type-of(nth(nth($args, 1), 2)) == 'map' {
+      @each $arg in $args {
+        $breakpoint: nth($arg, 1);
+        $bp-args: nth($arg, 2);
+
+        @if $breakpoint == 'default' {
+          @include grid-column-args($bp-args);
+        }
+        @else {
+          @include media($breakpoint) {
+            @include grid-column-args($bp-args);
+          }
+        }
       }
-    }
-    @elseif $prop == justify {
-      @if $val == end {
-        margin-left: auto;
-      }
-      @elseif $val == center {
-        margin: auto;
-      }
-    }
-    @elseif $prop == align {
-      align-self: grid-format-val($val);
     }
     @else {
-      #{$prop}: $val;
+      @include grid-column-args($args);
     }
   }
 }
