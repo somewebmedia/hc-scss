@@ -8,6 +8,28 @@ $wrapper-max-width: 1170px !default;
 $wrapper-gutters: 20px !default;
 
 /* Helpers */
+
+@function grid-arg-type($arg) {
+  @if (type-of($arg) == 'number' and unitless($arg)) or $arg == auto or $arg == responsive {
+    @return 'columns';
+  }
+  @elseif type-of($arg) == 'number' and not unitless($arg) {
+    @return 'gutters';
+  }
+  @elseif type-of($arg) == 'map' and length($arg) > 0 {
+    @if type-of(nth(nth($arg, 1), 2)) == 'number' and unitless(nth(nth($arg, 1), 2)) {
+      @return 'columns';
+    }
+    @if type-of(nth(nth($arg, 1), 2)) == 'number' and not unitless(nth(nth($arg, 1), 2)) {
+      @return 'gutters';
+    }
+    @elseif type-of(nth(nth($arg, 1), 2)) == 'map' or type-of(nth(nth($arg, 1), 2)) == 'string' {
+      @return 'options';
+    }
+  }
+  @return false;
+}
+
 @function grid-format-val($val) {
   @if $val == ltr {
     @return row;
@@ -98,7 +120,7 @@ $wrapper-gutters: 20px !default;
         $breakpoint: nth($gutter, 1);
         $padding: nth($gutter, 2);
 
-        @if $breakpoint == 'default' {
+        @if $breakpoint == default {
           padding-left: $padding / 2;
           padding-right: $padding / 2;
         }
@@ -125,12 +147,27 @@ $wrapper-gutters: 20px !default;
  *      justify    start | end | center | space-between | space-around | space-evenly
  *      align      auto | start | end | center | baseline | stretch
  */
-@mixin grid-row($gutters: $grid-gutters, $args: ()) {
+@mixin grid-row($_gutters: null, $_options: null) {
   position: relative;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
 
+  $gutters: $grid-gutters;
+  $options: ();
+
+  @if grid-arg-type($_gutters) == 'gutters' {
+    $gutters: $_gutters;
+  }
+  @elseif grid-arg-type($_gutters) == 'options' {
+    $options: $_gutters;
+  }
+
+  @if grid-arg-type($_options) == 'options' {
+    $options: $_options;
+  }
+
+  // gutters
   @if $gutters != false {
 
     @if type-of($gutters) == 'number' {
@@ -156,30 +193,30 @@ $wrapper-gutters: 20px !default;
     }
   }
 
-  // arguments
-  @if not map-has-key($args, default) or length($args) == 0 {
+  // options
+  @if type-of($options) == 'map' and not map-has-key($options, default) or length($options) == 0 {
     @include grid-row-args(());
   }
 
-  @if length($args) > 0 {
+  @if length($options) > 0 {
 
-    @if type-of(nth(nth($args, 1), 2)) == 'map' {
-      @each $arg in $args {
-        $breakpoint: nth($arg, 1);
-        $bp-args: nth($arg, 2);
+    @if type-of(nth(nth($options, 1), 2)) == 'map' {
+      @each $option in $options {
+        $breakpoint: nth($option, 1);
+        $bp-options: nth($option, 2);
 
         @if $breakpoint == 'default' {
-          @include grid-row-args($bp-args);
+          @include grid-row-args($bp-options);
         }
         @else {
           @include media($breakpoint) {
-            @include grid-row-args($bp-args, true);
+            @include grid-row-args($bp-options, true);
           }
         }
       }
     }
     @else {
-      @include grid-row-args($args);
+      @include grid-row-args($options);
     }
   }
 }
@@ -202,8 +239,33 @@ $wrapper-gutters: 20px !default;
  *      align    auto | start | end | center | baseline | stretch
  *      justify  start | end, center
  */
-@mixin grid-column($columns: auto, $gutters: $grid-gutters, $args: ()) {
+@mixin grid-column($_columns: null, $_gutters: null, $_options: null) {
   box-sizing: border-box;
+
+  $columns: auto;
+  $gutters: $grid-gutters;
+  $options: ();
+
+  @if grid-arg-type($_columns) == 'columns' {
+    $columns: $_columns;
+  }
+  @elseif grid-arg-type($_columns) == 'gutters' {
+    $gutters: $_columns;
+  }
+  @elseif grid-arg-type($_columns) == 'options' {
+    $options: $_columns;
+  }
+
+  @if grid-arg-type($_gutters) == 'gutters' {
+    $gutters: $_gutters;
+  }
+  @elseif grid-arg-type($_gutters) == 'options' {
+    $options: $_gutters;
+  }
+
+  @if grid-arg-type($_options) == 'options' {
+    $options: $_options;
+  }
 
   // columns
   @if $columns == auto {
@@ -288,25 +350,25 @@ $wrapper-gutters: 20px !default;
   }
 
   // arguments
-  @if length($args) > 0 {
+  @if length($options) > 0 {
 
-    @if type-of(nth(nth($args, 1), 2)) == 'map' {
-      @each $arg in $args {
-        $breakpoint: nth($arg, 1);
-        $bp-args: nth($arg, 2);
+    @if type-of(nth(nth($options, 1), 2)) == 'map' {
+      @each $option in $options {
+        $breakpoint: nth($option, 1);
+        $bp-options: nth($option, 2);
 
         @if $breakpoint == 'default' {
-          @include grid-column-args($bp-args);
+          @include grid-column-args($bp-options);
         }
         @else {
           @include media($breakpoint) {
-            @include grid-column-args($bp-args);
+            @include grid-column-args($bp-options);
           }
         }
       }
     }
     @else {
-      @include grid-column-args($args);
+      @include grid-column-args($options);
     }
   }
 }

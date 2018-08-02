@@ -3,8 +3,8 @@
 @mixin col { // for testing
   padding-top: 16px;
   padding-bottom: 16px;
-  background-color: rgba(86,61,124,.15);
-  border: 1px solid rgba(86,61,124,.2);
+  background: rgba(86, 61, 124, .15);
+  border: 1px solid rgba(86, 61, 124, .2);
 }
 
 h2 {
@@ -95,11 +95,11 @@ h2 {
   }
 
   .col-4 {
-    @include grid-column((small: 6, medium: 4));
+    @include grid-column((default: 6, 600px: 4));
   }
 
   .col-2-5 {
-    @include grid-column(2.4);
+    @include grid-column((default: 12, small: 6, smedium: 2.4));
   }
 }
 
@@ -112,24 +112,24 @@ h2 {
   .row {
 
     &.justify-center {
-      @include grid-row(default, (justify: center));
+      @include grid-row((justify: center));
     }
 
     &.justify-end {
-      @include grid-row(default, (justify: end));
+      @include grid-row((justify: end));
     }
 
     &.justify-space-between {
-      @include grid-row(default, (justify: space-between));
+      @include grid-row((justify: space-between));
     }
   }
 
   .col-3 {
-    @include grid-column(3, default, (grow: false));
+    @include grid-column(3, (grow: false));
   }
 
   .col-2 {
-    @include grid-column(2, default, (grow: false));
+    @include grid-column(2, (grow: false));
   }
 }
 
@@ -155,19 +155,64 @@ h2 {
 
   .justify-end {
     .col-custom {
-      @include grid-column(auto, default, (justify: end, grow: false));
+      @include grid-column(auto, (justify: end, grow: false));
     }
   }
 
   .justify-center {
     .col-custom {
-      @include grid-column(3, default, (justify: center, grow: false));
+      @include grid-column(3, (justify: center, grow: false));
     }
   }
 
   .order {
     .col-custom {
-      @include grid-column(auto, default, (order: -1));
+      @include grid-column(auto, (order: -1));
+    }
+  }
+}
+
+#vertical-alignment {
+
+  .table {
+    @include grid-container;
+  }
+
+  .row {
+    height: 120px;
+    background-color: rgba(255, 0, 0, .1);
+
+    &.align-default,
+    &.align-self {
+      @include grid-row;
+    }
+
+    &.align-start {
+      @include grid-row((align: flex-start));
+    }
+
+    &.align-center {
+      @include grid-row((align: center));
+    }
+
+    &.align-end {
+      @include grid-row((align: flex-end));
+    }
+  }
+
+  .col-4 {
+    @include grid-column(4);
+
+    &.start {
+      @include grid-column(4, (align-self: flex-start));
+    }
+
+    &.center {
+      @include grid-column(4, (align-self: center));
+    }
+
+    &.end {
+      @include grid-column(4, (align-self: flex-end));
     }
   }
 }
