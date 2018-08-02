@@ -17,13 +17,13 @@ $wrapper-gutters: 20px !default;
     @return 'gutters';
   }
   @elseif type-of($arg) == 'map' and length($arg) > 0 {
-    @if type-of(nth(nth($arg, 1), 2)) == 'number' and unitless(nth(nth($arg, 1), 2)) {
+    @if type-of(nth(nth($arg, 1), 2)) == 'number' and unitless(nth(nth($arg, 1), 2)) and nth(nth($arg, 1), 1) != order {
       @return 'columns';
     }
     @if type-of(nth(nth($arg, 1), 2)) == 'number' and not unitless(nth(nth($arg, 1), 2)) {
       @return 'gutters';
     }
-    @elseif type-of(nth(nth($arg, 1), 2)) == 'map' or type-of(nth(nth($arg, 1), 2)) == 'string' {
+    @else {
       @return 'options';
     }
   }
