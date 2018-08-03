@@ -1,7 +1,7 @@
 {
   "name": "hc-scss",
   "version": "1.0.0",
-  "description": "Simple and lightweight scss framework, with few goodies for easier front-end development.",
+  "description": "Simple and lightweight scss framework, with few goodies for easier front-end development",
   "homepage": "http://somewebmedia.com/hc-scss",
   "author": {
     "name": "Some Web Media",
@@ -19,8 +19,7 @@
     "gulp-autoprefixer": "^3.1.0",
     "gulp-rename": "1.3.0",
     "gulp-sass": "^3.2.1",
-    "yargs": "^6.6.0",
-    "vinyl-fs": "^3.0.2"
+    "yargs": "^6.6.0"
   },
   "keywords": [
     "css",
