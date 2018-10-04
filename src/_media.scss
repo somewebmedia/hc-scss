@@ -31,7 +31,7 @@ $media-custom-breakpoints: ();
   }
 }
 
-@mixin media($from, $to:'', $prop:width) {
+@mixin media($from, $to: '', $prop: width) {
   @if $from == 0 {
     @media screen and (max-#{$prop}:#{media-breakpoint-val($to) - 1px}) {
       @content;

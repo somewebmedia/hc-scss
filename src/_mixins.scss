@@ -35,7 +35,7 @@
 }
 
 
-@mixin hide-element($duration:.15s, $timing:ease) {
+@mixin hide-element($duration: .15s, $timing: ease) {
   opacity: 0;
   visibility: hidden;
   transition: opacity $duration $timing;

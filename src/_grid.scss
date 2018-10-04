@@ -278,17 +278,14 @@ $wrapper-gutters: 20px !default;
     flex: 0 0 100%;
 
     @include media(small) {
-      max-width: 50%;
       flex: 1 0 50%;
     }
 
     @include media(smedium) {
-      max-width: 33.33%;
       flex: 1 0 33.33%;
     }
 
     @include media(medium) {
-      max-width: 100%;
       flex-grow: 1;
       flex-basis: 0;
     }
